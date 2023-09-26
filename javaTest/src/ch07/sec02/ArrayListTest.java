@@ -2,6 +2,7 @@ package ch07.sec02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,16 +24,24 @@ public class ArrayListTest {
 		// 가져오기
 		pringArrayAndList(strArray, strList);
 
-		//ArrayList >> Iterator 변환해서 출력하기
+		// ArrayList >> Iterator 변환해서 출력하기
 		System.out.println("===============Iterator=============");
 		Iterator<String> iterator = strList.iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			String data = iterator.next();
-			System.out.printf("%s ",data);
+			System.out.printf("%s ", data);
 		}
 		System.out.println("");
-		
-		
+
+		// 문자열을 정렬해서 보여주기
+		System.out.println("=====================Sort===============");
+		Collections.sort(strList);
+		pringArrayAndList(strArray, strList);
+		// 문자열을 역정렬해서 보여주기
+		System.out.println("===============Reverse Sort===============");
+		Collections.reverse(strList);
+		pringArrayAndList(strArray, strList);
+
 		// 삽입(2번째 위치 삽입)
 		strArray[1] = new String("저길동");
 		strList.add(1, new String("저길동"));
