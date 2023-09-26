@@ -1,6 +1,9 @@
 package ch07.sec02;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 //import java.util.ArrayList;
 
@@ -20,6 +23,16 @@ public class ArrayListTest {
 		// 가져오기
 		pringArrayAndList(strArray, strList);
 
+		//ArrayList >> Iterator 변환해서 출력하기
+		System.out.println("===============Iterator=============");
+		Iterator<String> iterator = strList.iterator();
+		while(iterator.hasNext()) {
+			String data = iterator.next();
+			System.out.printf("%s ",data);
+		}
+		System.out.println("");
+		
+		
 		// 삽입(2번째 위치 삽입)
 		strArray[1] = new String("저길동");
 		strList.add(1, new String("저길동"));
