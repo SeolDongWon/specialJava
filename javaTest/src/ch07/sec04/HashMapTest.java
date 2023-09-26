@@ -14,7 +14,9 @@ public class HashMapTest {
 		hmDic.put("baby", "아기");
 		hmDic.put("love", "사랑");
 		hmDic.put("apple", "사과");
-
+		// 추가시 이전 객체 삭제
+		hmDic.put("apple", "사과2");
+		
 		// HashMap 출력(키 객체->Set)
 		Set<String> keySet = hmDic.keySet();
 		for (String key : keySet) {
