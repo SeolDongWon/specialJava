@@ -95,7 +95,7 @@ public class ArrayListTest {
 		System.out.println("====================================");
 		System.out.printf("strArray %s\n", (isEmpty == true) ? "비어있어요" : "값이 있어요");
 		System.out.printf("strList %s\n", (strList.isEmpty() == true) ? "비어있어요" : "값이 있어요");
-
+		System.out.println("====================================");
 		System.out.println("END");
 	}
 
