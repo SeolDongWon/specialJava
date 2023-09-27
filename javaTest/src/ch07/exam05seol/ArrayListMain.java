@@ -39,6 +39,8 @@ public class ArrayListMain {
 					
 			//stuList.
 			int index = stuList.indexOf(Objects.hash(name));
+			
+			
 			System.out.printf("%s\n", (index != -1) ? stuList.get(index) : "없음");
 		}
 

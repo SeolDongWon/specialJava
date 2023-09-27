@@ -9,7 +9,7 @@ public class Exam07Main {
 	public static final int NUMBER = 5;
 	public static void main(String[] args) {
 		
-		HashMap<String,Student> hsMap = new HashMap<String,Student>();
+		HashMap<String,Student> hsMap = new HashMap<>();
 		System.out.println("미래장학금관리시스템입니다.");
 		
 //		for(int i=0;i<NUMBER;i++) {
