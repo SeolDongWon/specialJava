@@ -4,65 +4,62 @@ import java.util.Objects;
 
 public class Student {
 	private String name;
-	private String dep;
-	private String id;
-	private double score;
-	
-	public Student() {
-		this(null,null,null,0);
-	}
-	public Student(String id) {
-		this(null,null,id,0);
-	}
-	public Student(String name,String id) {
-		this(name,null,id,0);
-	}
-	public Student(String name, String dep, String id) {
-		this(name,dep,id,0);
-	}
+	private String major;
+	private int id;
+	private double gpa;
 
-	public Student(String name, String dep, String id, double score) {
+	public Student() {
+		this(null, null, 0, 0.0);
+	}
+	
+	public Student(String name, int id) {
+		this(name,null,id,0.0);
+	}
+	
+	public Student(String name, String major, int id, double gpa) {
 		super();
 		this.name = name;
-		this.dep = dep;
+		this.major = major;
 		this.id = id;
-		this.score = score;
+		this.gpa = gpa;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getDep() {
-		return dep;
+	public String getMajor() {
+		return major;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public double getScore() {
-		return score;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		Student stu = (Student)obj;
-		if(this.name.equals(stu.name)&&this.dep.equals(stu.dep)&&this.id.equals(stu.dep)&&this.score==stu.score) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name,dep,id,score);
+	public double getGpa() {
+		return gpa;
 	}
 
 	@Override
 	public String toString() {
-			return "이름:" + name + "\n학과:" + dep + "\n학번:" + id + "\n학점평균:" + score + "\n";
+		return "[name=" + name + ", major=" + major + ", id=" + id + ", gpa=" + gpa + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.name,this.id);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Student stu = null;
+		if(!(obj instanceof Student)) {	
+			return false;
+		}
+		stu = (Student)obj;
+		if(this.name.equals(stu.name)&&this.id==stu.id) {
+			return true;
+		}
+		return false;
+	}
 }
