@@ -1,4 +1,4 @@
-package ch07.exam05;
+package ch07.exam05seol;
 
 import java.util.HashMap;
 import java.util.Scanner;

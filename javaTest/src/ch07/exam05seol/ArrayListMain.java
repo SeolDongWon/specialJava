@@ -1,6 +1,7 @@
-package ch07.exam05;
+package ch07.exam05seol;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ArrayListMain {
@@ -37,8 +38,7 @@ public class ArrayListMain {
 		//	stuList.
 					
 			//stuList.
-			boolean falg = stuList.contains(name);
-			int index = stuList.indexOf(name);
+			int index = stuList.indexOf(Objects.hash(name));
 			System.out.printf("%s\n", (index != -1) ? stuList.get(index) : "없음");
 		}
 

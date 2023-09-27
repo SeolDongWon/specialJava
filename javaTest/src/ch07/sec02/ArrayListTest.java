@@ -58,6 +58,7 @@ public class ArrayListTest {
 				break;
 			}
 		}
+		//strList.con
 		System.out.println("====================================");
 		System.out.printf("배열에 저길동이 %s\n", (isFind == true) ? "있어요" : "없어요");
 		System.out.printf("배열에 저길동이 위치는 %d\n", indexOf);

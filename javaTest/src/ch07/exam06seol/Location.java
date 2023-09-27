@@ -1,4 +1,4 @@
-package ch07.exam06;
+package ch07.exam06seol;
 
 import java.util.Objects;
 
