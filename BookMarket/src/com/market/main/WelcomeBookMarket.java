@@ -3,8 +3,8 @@ package com.market.main;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -31,10 +31,10 @@ public class WelcomeBookMarket {
 
 		int numberSelection;// 메뉴 번호선택
 
-		// Book[] bookInfoList = new Book[NUM_BOOK];
-
-		Book[] bookInfoList;
-		int totalBookCount = 0;
+//		Book[] bookInfoList = new Book[NUM_BOOK];
+//		Book[] bookInfoList; // 도서 정보를 저장하기 위한 배열 선언
+		ArrayList<Book> bookInfoList;
+		int totalBookCount = 0; // 도서 총 개수를 저장
 
 		System.out.println("Book Market 고객 정보 입력");
 		System.out.print("고객의 이름을 입력하세요 : ");
@@ -76,7 +76,8 @@ public class WelcomeBookMarket {
 //					System.out.println("4.장바구니에 항목 추가하기 ");
 						// menuCartAddItem(bookInfoList);
 						totalBookCount = totalFileToBookList(); // 도서 개수
-						bookInfoList = new Book[totalBookCount]; // 도서 개수에 따른 도서 객체 배열
+						// bookInfoList = new Book[totalBookCount]; // 도서 개수에 따른 도서 객체 배열
+						bookInfoList = new ArrayList<Book>();
 						menuCartAddItem(bookInfoList);
 						break;
 					case 5:
@@ -106,6 +107,7 @@ public class WelcomeBookMarket {
 				System.out.println(e.getMessage());
 				quit = true;
 			} catch (Exception e) {
+				System.out.println(e);
 				System.out.println("잘못된 메뉴 선택으로 종료합니다.");
 				quit = true;
 			}
@@ -153,7 +155,7 @@ public class WelcomeBookMarket {
 		}
 	}
 
-	public static void menuCartAddItem(Book[] book) {
+	public static void menuCartAddItem(ArrayList<Book> book) {
 		// System.out.println("장바구니에 항목 추가하기 : ");
 
 		bookList(book); // 도서 정보가 저장되어 있는 메서드 호출
@@ -169,10 +171,10 @@ public class WelcomeBookMarket {
 			boolean flag = false; // 일치여부
 			int numId = -1; // 인덱스 번호
 
-			for (int i = 0; i < NUM_BOOK; i++) {
+			for (int i = 0; i < book.size(); i++) {
 				// 입력한 도서 ID와 저장되어 이쓴 도서 정보의 ID가 일치하면
 				// 인덱스 번호와 일치 여부 변수의 값을 변경한다.
-				if (inputStr.equals(book[i].getBookId())) {
+				if (inputStr.equals(book.get(i).getBookId())) {
 					numId = i;
 					flag = true;
 					break;
@@ -185,11 +187,11 @@ public class WelcomeBookMarket {
 				inputStr = input.nextLine();
 
 				if (inputStr.toUpperCase().equals("Y") || inputStr.toUpperCase().equals("y")) {
-					System.out.println(book[numId].getBookId() + "도서가 장바구니에 추가되었습니다.");
+					System.out.println(book.get(numId).getBookId() + "도서가 장바구니에 추가되었습니다.");
 					// 장바구니에 넣기
-					if (!isCartInbook(book[numId].getBookId())) {
+					if (!isCartInbook(book.get(numId).getBookId())) {
 						// cartItem[cartCount++] = new CartItem(book[numId]);
-						cart.insertBook(book[numId]);
+						cart.insertBook(book.get(numId));
 					}
 				}
 				quit = true;
@@ -218,7 +220,7 @@ public class WelcomeBookMarket {
 				int numId = -1;
 
 				for (int i = 0; i < cart.cartCount; i++) {
-					if (str.equals(cart.cartItem[i].getBookID())) {
+					if (str.equals(cart.cartItem.get(i).getBookID())) {
 						numId = i;
 						flag = true;
 						break;
@@ -229,7 +231,7 @@ public class WelcomeBookMarket {
 					System.out.println("장바구니의 항목을 삭제하겠습니까? Y | N");
 					str = input.nextLine();
 					if (str.toUpperCase().equals("Y") || str.toUpperCase().equals("y")) {
-						System.out.println(cart.cartItem[numId].getBookID() + "장바구니에서 도서가 삭제되었습니다.");
+						System.out.println(cart.cartItem.get(numId).getBookID() + "장바구니에서 도서가 삭제되었습니다.");
 						cart.removeCart(numId);
 					}
 					quit = true;
@@ -272,7 +274,7 @@ public class WelcomeBookMarket {
 		System.out.println("8.종료 ");
 	}
 
-	public static void bookList(Book[] book) {
+	public static void bookList(ArrayList<Book> book) {
 		setFileToBookList(book);
 	}
 
@@ -361,7 +363,7 @@ public class WelcomeBookMarket {
 		// 장바구니에 담긴 항목의 총 금액 계산
 		int sum = 0;
 		for (int i = 0; i < cart.cartCount; i++) {
-			sum += cart.cartItem[i].getTotalPrice();
+			sum += cart.cartItem.get(i).getTotalPrice();
 		}
 		System.out.println("\t\t\t주문 총금액 : " + sum + "원\n");
 		System.out.println("----------------------------------------------------------");
@@ -391,7 +393,7 @@ public class WelcomeBookMarket {
 	}
 
 	// 도서의 정보를 읽고 배열에 저장하는 메서드
-	private static void setFileToBookList(Book[] booklist) {
+	private static void setFileToBookList(ArrayList<Book> bookList) {
 		try {
 			FileReader fr = new FileReader("book.txt");
 			BufferedReader reader = new BufferedReader(fr);
@@ -418,8 +420,9 @@ public class WelcomeBookMarket {
 					readBook[7] = reader.readLine();
 					;
 				}
-				booklist[count++] = new Book(readBook[0], readBook[1], readBook[2], Integer.parseInt(readBook[3]),
-						readBook[4], readBook[5], readBook[6], readBook[7]);
+				Book book = new Book(readBook[0], readBook[1], readBook[2], Integer.parseInt(readBook[3]), readBook[4],
+						readBook[5], readBook[6], readBook[7]);
+				bookList.add(book);
 			}
 			reader.close();
 			fr.close();
