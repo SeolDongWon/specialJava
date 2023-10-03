@@ -3,6 +3,8 @@ import java.util.Scanner;
 public class WelcomeBookMarket {
 	static final int NUM_BOOK = 3; // 도서 개수
 	static final int NUM_ITEM = 8; // 도서 정보의 개수
+	static CartItem[] cartItem = new CartItem[NUM_BOOK];
+	static int cartCount = 0;
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
@@ -23,16 +25,6 @@ public class WelcomeBookMarket {
 		boolean quit = false; // 무한반복
 
 		while (!quit) {
-
-//			System.out.println("************************************************");
-//			System.out.println("\t\t" + "Book Market Menu");
-//			System.out.println("************************************************");
-//			System.out.println("1.고객정보 확인하기  \t 4.장바구니에 항목 추가하기");
-//			System.out.println("2.장바구니 상품 목록 보기\t 5.장바구니의 항목 수량 줄이기");
-//			System.out.println("3.장바구니 비우기   \t 6.장바구니의 항목 삭제하기");
-//			System.out.println("7.영수증 표시하기   \t 8.종료");
-//			System.out.println("************************************************");
-
 			menuIntroduction();
 
 			System.out.print("메뉴 번호를 선택해주세요 ");
@@ -44,7 +36,6 @@ public class WelcomeBookMarket {
 				switch (numberSelection) {
 				case 1:
 //					System.out.println("현재 고객 정보");
-//					System.out.println("이름 : " + userName + ", 연락처 : " + userMobile);
 					menuGuestInfo(userName, userMobile);
 					break;
 				case 2:
@@ -92,13 +83,24 @@ public class WelcomeBookMarket {
 		System.out.println("************************************************");
 	}
 
-	private static void menuGuestInfo(String userName, int userMobile) {
+	private static void menuGuestInfo(String name, int mobile) {
 		System.out.println("현재 고객 정보");
-		System.out.println("이름 : " + userName + ", 연락처 : " + userMobile);
+		// System.out.println("이름 : " + userName + ", 연락처 : " + userMobile);
+		Customer customer = new Customer(name, mobile);
+		System.out.println("이름 : " + customer.getName() + ", 연락처 : " + customer.getPhone());
 	}
 
 	private static void menuCartItemList() {
 		System.out.println("장바구니 상품목록 : ");
+		System.out.println("-----------------------------------------------");
+		System.out.println("    도서ID \t|     수량 \t|     합계");
+		for (int i = 0; i < cartCount; i++) {
+			System.out.print("      " + cartItem[i].getBookID() + "\t|");
+			System.out.print("      " + cartItem[i].getQuantity() + "\t|");
+			System.out.print("      " + cartItem[i].getTotalPrice() + "\t|");
+			System.out.println(" ");
+		}
+		System.out.println("-----------------------------------------------");
 	}
 
 	private static void menuCartClear() {
@@ -142,6 +144,10 @@ public class WelcomeBookMarket {
 
 				if (inputStr.toUpperCase().equals("Y") || inputStr.toUpperCase().equals("y")) {
 					System.out.println(book[numId][0] + "도서가 장바구니에 추가되었습니다.");
+					// 장바구니에 넣기
+					if (!isCartInbook(book[numId][0])) {
+						cartItem[cartCount++] = new CartItem(book[numId]);
+					}
 				}
 				quit = true;
 			} else
@@ -190,5 +196,16 @@ public class WelcomeBookMarket {
 		book[2][5] = "러스트는 시스템 프로그래밍에 적합한 언어";
 		book[2][6] = "프로그래밍 언어";
 		book[2][7] = "2022/07/08";
+	}
+
+	private static boolean isCartInbook(String bookId) {
+		boolean flag = false;
+		for (int i = 0; i < cartCount; i++) {
+			if (bookId == cartItem[i].getBookID()) {
+				cartItem[i].setQuantity(cartItem[i].getQuantity() + 1);
+				flag = true;
+			}
+		}
+		return flag;
 	}
 }
