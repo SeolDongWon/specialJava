@@ -1,3 +1,5 @@
+package com.market.cart;
+import com.market.bookitem.Book;
 
 public interface CartInterface {
 	void printBookList(Book[] p); // 전체 도서 정보 목록 출력

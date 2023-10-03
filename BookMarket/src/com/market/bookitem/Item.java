@@ -1,3 +1,4 @@
+package com.market.bookitem;
 
 public abstract class Item {
 	String bookId; // 도서 ID

@@ -1,3 +1,4 @@
+package com.market.member;
 
 public class Customer {
 	private String name;
