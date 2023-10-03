@@ -1,4 +1,5 @@
 package com.market.cart;
+
 import com.market.bookitem.Book;
 
 public class Cart implements CartInterface {
@@ -49,7 +50,7 @@ public class Cart implements CartInterface {
 		int num = 0;
 
 		for (int i = 0; i < cartCount; i++)
-			if (numId != i) 
+			if (numId != i)
 				cartItem[num++] = cartItem[i];
 
 		cartCount = num;
@@ -66,7 +67,7 @@ public class Cart implements CartInterface {
 	public void printCart() {
 		System.out.println("장바구니 상품목록 : ");
 		System.out.println("-----------------------------------------------");
-		System.out.println("    도서ID \t|     수량 \t|     합계");
+		System.out.println("      도서ID \t\t|      수량 \t|      합계");
 		for (int i = 0; i < cartCount; i++) {
 			System.out.print("      " + cartItem[i].getBookID() + "\t|");
 			System.out.print("      " + cartItem[i].getQuantity() + "\t|");
