@@ -1,20 +1,18 @@
 package com.market.main;
 
-import java.util.Scanner;
 import com.market.bookitem.Book;
 import com.market.cart.Cart;
-import com.market.cart.CartItem;
+import com.market.exception.CartException;
 import com.market.member.Admin;
 import com.market.member.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class WelcomeBookMarket {
 	static final int NUM_BOOK = 3; // 도서 개수
 	static final int NUM_ITEM = 8; // 도서 정보의 개수
-	static CartItem[] cartItem = new CartItem[NUM_BOOK]; // 장바구니
-	static int cartCount = 0; // 장바구니 목록 개수
 
 	static Cart cart = new Cart();
 	static User user; // 사용자
@@ -23,9 +21,11 @@ public class WelcomeBookMarket {
 		Scanner input = new Scanner(System.in);
 
 		String userName; // 고객 이름
+
 		int userMobile; // 연락처
+
 		int numberSelection;// 메뉴 번호선택
-//		String[][] bookInfoList = new String[NUM_BOOK][NUM_ITEM]; // 도서 정보 목록 배열
+
 		Book[] bookInfoList = new Book[NUM_BOOK];
 
 		System.out.println("Book Market 고객 정보 입력");
@@ -44,51 +44,59 @@ public class WelcomeBookMarket {
 		while (!quit) {
 			menuIntroduction();
 
-			System.out.print("메뉴 번호를 선택해주세요 ");
-			numberSelection = input.nextInt();
+			try {
+				System.out.print("메뉴 번호를 선택해주세요 ");
+				numberSelection = input.nextInt();
 
-			if (numberSelection < 1 || numberSelection > 9) {
-				System.out.println("1부터 9까지의 숫자를 입력하세요.");
-			} else {
-				switch (numberSelection) {
-				case 1:
+				if (numberSelection < 1 || numberSelection > 9) {
+					System.out.println("1부터 9까지의 숫자를 입력하세요.");
+				} else {
+					switch (numberSelection) {
+					case 1:
 //					System.out.println("현재 고객 정보");
-					menuGuestInfo(userName, userMobile);
-					break;
-				case 2:
+						menuGuestInfo(userName, userMobile);
+						break;
+					case 2:
 //					System.out.println("2. 장바구니 상품목록 보기");
-					menuCartItemList();
-					break;
-				case 3:
+						menuCartItemList();
+						break;
+					case 3:
 //					System.out.println("3.장바구니 비우기 ");
-					menuCartClear();
-					break;
-				case 4:
+						menuCartClear();
+						break;
+					case 4:
 //					System.out.println("4.장바구니에 항목 추가하기 ");
-					menuCartAddItem(bookInfoList);
-					break;
-				case 5:
+						menuCartAddItem(bookInfoList);
+						break;
+					case 5:
 //					System.out.println("5.장바구니의 항목 수량 줄이기 ");
-					menuCartRemoveItemCount();
-					break;
-				case 6:
+						menuCartRemoveItemCount();
+						break;
+					case 6:
 //					System.out.println("6.장바구니의 항목 삭제하기 ");
-					menuCartRemoveItem();
-					break;
-				case 7:
+						menuCartRemoveItem();
+						break;
+					case 7:
 //					System.out.println("7.영수증 표시하기 ");
-					menuCartBill();
-					break;
-				case 8:
+						menuCartBill();
+						break;
+					case 8:
 //					System.out.println("8.종료 ");
-					menuExit();
-					quit = true;
-					break;
-				case 9:
-					// 관리자 로그인 정보 확인 메서드 호출
-					menuAdminLogin();
-					break;
+						menuExit();
+						quit = true;
+						break;
+					case 9:
+						// 관리자 로그인 정보 확인 메서드 호출
+						menuAdminLogin();
+						break;
+					}
 				}
+			} catch (CartException e) {
+				System.out.println(e.getMessage());
+				quit = true;
+			} catch (Exception e) {
+				System.out.println("잘못된 메뉴 선택으로 종료합니다.");
+				quit = true;
 			}
 		}
 	}
@@ -108,32 +116,20 @@ public class WelcomeBookMarket {
 
 	private static void menuGuestInfo(String name, int mobile) {
 		System.out.println("현재 고객 정보");
-		// System.out.println("이름 : " + userName + ", 연락처 : " + userMobile);
-		// Customer customer = new Customer(name, mobile);
 		System.out.println("이름 : " + user.getName() + ", 연락처 : " + user.getPhone());
 	}
 
 	private static void menuCartItemList() {
-//		System.out.println("장바구니 상품목록 : ");
-//		System.out.println("-----------------------------------------------");
-//		System.out.println("    도서ID \t|     수량 \t|     합계");
-//		for (int i = 0; i < cartCount; i++) {
-//			System.out.print("      " + cartItem[i].getBookID() + "\t|");
-//			System.out.print("      " + cartItem[i].getQuantity() + "\t|");
-//			System.out.print("      " + cartItem[i].getTotalPrice() + "\t|");
-//			System.out.println(" ");
-//		}
-//		System.out.println("-----------------------------------------------");
-
 		if (cart.cartCount >= 0) {
 			cart.printCart();
 		}
 	}
 
-	private static void menuCartClear() {
+	private static void menuCartClear() throws CartException {
 		// System.out.println("장바구니 비우기 ");
 		if (cart.cartCount == 0) {
-			System.out.println("장바구니에 항목이 없습니다");
+			// System.out.println("장바구니에 항목이 없습니다");
+			throw new CartException("장바구니에 항목이 없습니다");
 		} else {
 			System.out.println("장바구니에 모든 항목을 삭제하겠습니까? Y | N");
 			Scanner input = new Scanner(System.in);
@@ -150,12 +146,6 @@ public class WelcomeBookMarket {
 		// System.out.println("장바구니에 항목 추가하기 : ");
 
 		bookList(book); // 도서 정보가 저장되어 있는 메서드 호출
-		// 도서 정보 출력
-//		for (int i = 0; i < NUM_BOOK; i++) {
-//			for (int j = 0; j < NUM_ITEM; j++)
-//				System.out.print(book[i][j] + " | ");
-//			System.out.println("");
-//		}
 
 		cart.printBookList(book);
 		boolean quit = false;
@@ -201,10 +191,11 @@ public class WelcomeBookMarket {
 		System.out.println("5.장바구니의 항목 수량 줄이기 ");
 	}
 
-	private static void menuCartRemoveItem() {
+	private static void menuCartRemoveItem() throws CartException {
 		// System.out.println("6.장바구니의 항목 삭제하기 ");
 		if (cart.cartCount == 0) {
-			System.out.println("장바구니에 항목이 없습니다");
+			// System.out.println("장바구니에 항목이 없습니다");
+			throw new CartException("장바구니에 항목이 없습니다");
 		} else {
 			menuCartItemList();
 			boolean quit = false;
@@ -238,10 +229,11 @@ public class WelcomeBookMarket {
 		}
 	}
 
-	private static void menuCartBill() {
+	private static void menuCartBill() throws CartException {
 		// System.out.println("7.영수증 표시하기 ");
 		if (cart.cartCount == 0) {
 			System.out.println("장바구니에 항목이 없습니다");
+			throw new CartException("장바구니에 항목이 없습니다");
 		} else {
 			System.out.println("배송받을 분은 고객정보와 같습니까? Y | N");
 			Scanner input = new Scanner(System.in);
@@ -289,17 +281,8 @@ public class WelcomeBookMarket {
 		book[2].setReleaseDate("2022/07/08");
 	}
 
-	// 장바구니의 도서 ID 존재 여부 확인
+	// 장바구니에 도서 추가
 	private static boolean isCartInbook(String bookId) {
-//		boolean flag = false;
-//		for (int i = 0; i < cartCount; i++) {
-//			if (bookId == cartItem[i].getBookID()) {
-//				cartItem[i].setQuantity(cartItem[i].getQuantity() + 1);
-//				flag = true;
-//			}
-//		}
-//		return flag;
-
 		return cart.isCartInBook(bookId);
 	}
 
@@ -335,12 +318,12 @@ public class WelcomeBookMarket {
 		// 장바구니에 담긴 항목 출력
 		cart.printCart();
 
-		//장바구니에 담긴 항목의 총 금액 계산
-		int sum=0;
-		for(int i=0;i<cart.cartCount;i++) {
-			sum+=cart.cartItem[i].getTotalPrice();
+		// 장바구니에 담긴 항목의 총 금액 계산
+		int sum = 0;
+		for (int i = 0; i < cart.cartCount; i++) {
+			sum += cart.cartItem[i].getTotalPrice();
 		}
-		System.out.println("\t\t\t주문 총금액 : "+sum+"원\n");
+		System.out.println("\t\t\t주문 총금액 : " + sum + "원\n");
 		System.out.println("----------------------------------------------------------");
 		System.out.println();
 
