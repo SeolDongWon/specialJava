@@ -3,8 +3,10 @@ import java.util.Scanner;
 public class WelcomeBookMarket {
 	static final int NUM_BOOK = 3; // 도서 개수
 	static final int NUM_ITEM = 8; // 도서 정보의 개수
-	static CartItem[] cartItem = new CartItem[NUM_BOOK];
-	static int cartCount = 0;
+	static CartItem[] cartItem = new CartItem[NUM_BOOK]; // 장바구니
+	static int cartCount = 0; // 장바구니 목록 개수
+
+	static User user; // 사용자
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
@@ -22,6 +24,9 @@ public class WelcomeBookMarket {
 		userMobile = input.nextInt();
 		input.nextLine();
 
+		// 사용자 정보 저장
+		user = new User(userName, userMobile);
+
 		boolean quit = false; // 무한반복
 
 		while (!quit) {
@@ -30,8 +35,8 @@ public class WelcomeBookMarket {
 			System.out.print("메뉴 번호를 선택해주세요 ");
 			numberSelection = input.nextInt();
 
-			if (numberSelection < 1 || numberSelection > 8) {
-				System.out.println("1부터 8까지의 숫자를 입력하세요.");
+			if (numberSelection < 1 || numberSelection > 9) {
+				System.out.println("1부터 9까지의 숫자를 입력하세요.");
 			} else {
 				switch (numberSelection) {
 				case 1:
@@ -67,6 +72,9 @@ public class WelcomeBookMarket {
 					menuExit();
 					quit = true;
 					break;
+				case 9:
+					menuAdminLogin();
+					break;
 				}
 			}
 		}
@@ -80,14 +88,16 @@ public class WelcomeBookMarket {
 		System.out.println("2.장바구니 상품 목록 보기\t 5.장바구니의 항목 수량 줄이기");
 		System.out.println("3.장바구니 비우기   \t 6.장바구니의 항목 삭제하기");
 		System.out.println("7.영수증 표시하기   \t 8.종료");
+		System.out.println("9.관리자 로그인");
+
 		System.out.println("************************************************");
 	}
 
 	private static void menuGuestInfo(String name, int mobile) {
 		System.out.println("현재 고객 정보");
 		// System.out.println("이름 : " + userName + ", 연락처 : " + userMobile);
-		Customer customer = new Customer(name, mobile);
-		System.out.println("이름 : " + customer.getName() + ", 연락처 : " + customer.getPhone());
+		// Customer customer = new Customer(name, mobile);
+		System.out.println("이름 : " + user.getName() + ", 연락처 : " + user.getPhone());
 	}
 
 	private static void menuCartItemList() {
@@ -198,6 +208,7 @@ public class WelcomeBookMarket {
 		book[2][7] = "2022/07/08";
 	}
 
+	// 도서 ID 확인
 	private static boolean isCartInbook(String bookId) {
 		boolean flag = false;
 		for (int i = 0; i < cartCount; i++) {
@@ -207,5 +218,25 @@ public class WelcomeBookMarket {
 			}
 		}
 		return flag;
+	}
+
+	// 관리자 로그인 정보 확인 메서드
+	private static void menuAdminLogin() {
+		System.out.println("관리자 정보를 입력하세요");
+
+		Scanner input = new Scanner(System.in);
+		System.out.print("아이디 : ");
+		String adminId = input.next();
+
+		System.out.print("비밀번호 : ");
+		String adminPW = input.next();
+
+		Admin admin = new Admin(user.getName(), user.getPhone());
+		if (adminId.equals(admin.getId()) && adminPW.equals(admin.getPassword())) {
+			System.out.println("이름 : " + admin.getName() + ", 연락처 : " + admin.getPhone());
+			System.out.println("아이디 : " + admin.getId() + ", 비밀번호 : " + admin.getPassword());
+		} else {
+			System.out.println("관리자 정보가 일치하지 않습니다.");
+		}
 	}
 }
